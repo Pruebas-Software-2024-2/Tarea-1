@@ -46,9 +46,9 @@ def task_management_menu():
         print("\n--- Gestión de Tareas ---")
         print("(1) Crear tarea")
         print("(2) Listar tareas")
-        print("(3) Actualizar estado de tarea")
-        print("(4) Eliminar tarea")
-        print("(5) Buscar tarea")
+        print("(3) Buscar tarea")
+        print("(4) Actualizar tarea")
+        print("(5) Eliminar tarea")
         print("(6) Salir")
 
         choice = input("Selecciona una opción: ")
@@ -64,18 +64,18 @@ def task_management_menu():
             task_manager.list_tasks()
         
         elif choice == '3':
+            filter_type = input("¿Deseas buscar por (fecha), (etiqueta), o (estado)?: ").lower()
+            filter_value = input(f"Ingrese el valor para {filter_type}: ")
+            task_manager.search_tasks(filter_type, filter_value)
+        
+        elif choice == '4':
             title = input("Título de la tarea a actualizar: ")
             new_status = input("Nuevo estado (Pendiente, En progreso, Completada): ")
             task_manager.update_task_status(title, new_status)
         
-        elif choice == '4':
+        elif choice == '5':
             title = input("Título de la tarea a eliminar: ")
             task_manager.delete_task(title)
-        
-        elif choice == '5':
-            filter_type = input("¿Deseas buscar por (fecha), (etiqueta), o (estado)?: ").lower()
-            filter_value = input(f"Ingrese el valor para {filter_type}: ")
-            task_manager.search_tasks(filter_type, filter_value)
         
         elif choice == '6':
             print("Volviendo al menú principal...")
