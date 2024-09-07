@@ -1,6 +1,7 @@
 import json
 import os
 import logging
+from datetime import datetime
 
 TASKS_FILE = 'tasks.json'
 
@@ -19,12 +20,24 @@ def save_tasks(tasks):
 # Función para crear una nueva tarea
 def create_task(title, description, due_date, label):
     tasks = load_tasks()
+    try:
+        datetime.strptime(due_date, "%d-%m-%Y")
+    except ValueError:
+        logging.error("Error en el formato de la fecha. Use DD-MM-YYYY.")
+        raise ValueError("La fecha esta incorrecta. Por favor ingrese una fecha valida.")
+    current_date = datetime.now()
+
+    # Comparar la fecha de vencimiento con la fecha actual
+    if due_date < current_date:
+        status = "Atrasado"
+    else:
+        status = "Pendiente"  # Estado inicial: pendiente
     task = {
         'title': title,
         'description': description,
         'due_date': due_date,
         'label': label,
-        'status': 'pendiente'  # Estado inicial de la tarea
+        'status': status # Estado inicial de la tarea
     }
     tasks.append(task)
     save_tasks(tasks)
@@ -48,6 +61,10 @@ def update_task_status(title, new_status):
     tasks = load_tasks()
     for task in tasks:
         if task['title'] == title:
+            if new_status == "Completada":
+                delete_task(title)
+                print(f"Tarea '{task['title']}' completada y eliminada.")
+                return 
             task['status'] = new_status
             save_tasks(tasks)
             logging.info(f"Estado de la tarea '{title}' actualizado a '{new_status}'.")

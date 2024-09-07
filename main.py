@@ -55,8 +55,8 @@ def task_management_menu():
         if choice == '1':
             title = input("Título: ")
             description = input("Descripción: ")
-            due_date = input("Fecha de vencimiento (YYYY-MM-DD): ")
-            label = input("Etiqueta (por ejemplo, urgente, trabajo, personal): ")
+            due_date = input("Fecha de vencimiento (DD-MM-YYYY): ")
+            label = input("Etiqueta (por ejemplo, Urgente, Trabajo, Personal): ")
             task_manager.create_task(title, description, due_date, label)
         
         elif choice == '2':
