@@ -22,3 +22,9 @@
 2024-09-06 18:36:24,824 - INFO - Listado de tareas consultado.
 2024-09-06 18:45:37,971 - INFO - Listado de tareas consultado.
 2024-09-06 18:45:58,034 - INFO - Tarea eliminada: Hola mundo
+2024-09-07 01:04:16 - ERROR - Error en autenticación: El usuario ya está registrado
+2024-09-07 01:04:37 - INFO - Usuario 'ola' ha iniciado sesión.
+2024-09-07 01:05:09 - INFO - Tarea creada: a
+2024-09-07 01:05:19 - INFO - Listado de tareas consultado.
+2024-09-07 01:05:39 - INFO - Estado de la tarea 'a' actualizado a 'en progreso'.
+2024-09-07 01:05:52 - INFO - Tarea eliminada: a
