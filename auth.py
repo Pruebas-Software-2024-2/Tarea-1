@@ -38,7 +38,7 @@ def login_user(username, password):
     users = load_users()
     
     if username not in users:
-        raise ValueError("Usuario no registrado.")
+        return False
     
     # Verificar contraseña
     stored_hash = users[username]
