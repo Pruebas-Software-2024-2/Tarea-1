@@ -53,3 +53,8 @@
 2024-09-08 19:43:18 - INFO - Listado de tareas consultado.
 2024-09-08 19:43:36 - INFO - Filtros aplicados: etiqueta = urgente
 2024-09-08 19:43:41 - INFO - Se ha cerrado sesión.
+2024-09-08 19:43:54 - INFO - Usuario 'ola' ha iniciado sesión.
+2024-09-08 19:44:36 - INFO - Tarea creada: holaaaaa
+2024-09-08 19:44:46 - ERROR - Error en el formato de la fecha de búsqueda.
+2024-09-08 19:45:22 - INFO - Listado de tareas consultado.
+2024-09-08 19:54:27 - INFO - Se ha cerrado sesión.
