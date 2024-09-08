@@ -65,8 +65,10 @@ def update_task_status(title, new_status):
     for task in tasks:
         if task['title'] == title:
             if new_status == "Completada":
-                delete_task(title)
-                print(f"Tarea '{task['title']}' completada y eliminada.")
+                print(f"Tarea '{task['title']}' completada")
+                delete = input("Desea eliminarla?\n(1) Si\n(2)No\n")
+                if delete == "1":
+                    delete_task(title)
                 return 
             task['status'] = new_status
             save_tasks(tasks)
