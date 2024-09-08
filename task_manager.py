@@ -86,31 +86,33 @@ def delete_task(title):
     logging.info(f"Tarea eliminada: {title}")
 
 # Función para buscar tareas por etiqueta, fecha de vencimiento o estado
-def search_tasks(filter_type, filter_value):
+def search_tasks(filter_dict):
     tasks = load_tasks()
-    filtered_tasks = []
+    filtered_tasks = tasks
 
-    if filter_type == "fecha":
+    # Filtrar por fecha
+    if 'fecha' in filter_dict:
         try:
-            filter_date = datetime.strptime(filter_value, "%d-%m-%Y")
+            filter_date = datetime.strptime(filter_dict['fecha'], "%d-%m-%Y")
+            filtered_tasks = [task for task in filtered_tasks if datetime.strptime(task['due_date'], "%d-%m-%Y") == filter_date]
         except ValueError:
             print("Formato de fecha incorrecto. Use DD-MM-YYYY.")
             logging.error("Error en el formato de la fecha de búsqueda.")
             return
-        
-        filtered_tasks = [task for task in tasks if datetime.strptime(task['due_date'], "%d-%m-%Y") == filter_date]
 
-    elif filter_type == "etiqueta":
-        filtered_tasks = [task for task in tasks if task['label'].lower() == filter_value.lower()]
+    # Filtrar por etiqueta
+    if 'etiqueta' in filter_dict:
+        filtered_tasks = [task for task in filtered_tasks if task['label'].lower() == filter_dict['etiqueta'].lower()]
 
-    elif filter_type == "estado":
-        filtered_tasks = [task for task in tasks if task['status'].lower() == filter_value.lower()]
+    # Filtrar por estado
+    if 'estado' in filter_dict:
+        filtered_tasks = [task for task in filtered_tasks if task['status'].lower() == filter_dict['estado'].lower()]
 
     if not filtered_tasks:
-        print(f"No se encontraron tareas para el filtro: {filter_type} = {filter_value}")
-        logging.info(f"No se encontraron tareas para el filtro: {filter_type} = {filter_value}")
+        print("No se encontraron tareas con los filtros aplicados.")
+        logging.info("No se encontraron tareas con los filtros aplicados.")
         return
 
-    logging.info(f"Filtro aplicado: {filter_type} = {filter_value}")
+    logging.info("Filtros aplicados: " + ", ".join([f"{k} = {v}" for k, v in filter_dict.items()]))
     for task in filtered_tasks:
         print(f"Título: {task['title']}, Estado: {task['status']}, Fecha de vencimiento: {task['due_date']}, Etiqueta: {task['label']}")

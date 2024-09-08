@@ -64,9 +64,22 @@ def task_management_menu():
             task_manager.list_tasks()
         
         elif choice == '3':
-            filter_type = input("¿Deseas buscar por (fecha), (etiqueta), o (estado)?: ").lower()
-            filter_value = input(f"Ingrese el valor para {filter_type}: ")
-            task_manager.search_tasks(filter_type, filter_value)
+            # Se permite ingresar múltiples filtros opcionales
+            filter_dict = {}
+            fecha = input("Ingrese la fecha (DD-MM-YYYY) o deje en blanco para omitir: ")
+            if fecha:
+                filter_dict['fecha'] = fecha
+            etiqueta = input("Ingrese la etiqueta o deje en blanco para omitir: ")
+            if etiqueta:
+                filter_dict['etiqueta'] = etiqueta
+            estado = input("Ingrese el estado (Pendiente, En progreso, Completada) o deje en blanco para omitir: ")
+            if estado:
+                filter_dict['estado'] = estado
+
+            if filter_dict:
+                task_manager.search_tasks(filter_dict)  # Se realiza la búsqueda con filtros
+            else:
+                task_manager.list_tasks()
         
         elif choice == '4':
             title = input("Título de la tarea a actualizar: ")
