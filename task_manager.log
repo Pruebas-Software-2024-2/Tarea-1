@@ -58,3 +58,12 @@
 2024-09-08 19:44:46 - ERROR - Error en el formato de la fecha de búsqueda.
 2024-09-08 19:45:22 - INFO - Listado de tareas consultado.
 2024-09-08 19:54:27 - INFO - Se ha cerrado sesión.
+08-09-2024 23:40:10 - INFO - Nuevo usuario registrado: a
+08-09-2024 23:40:14 - INFO - Usuario 'a' ha iniciado sesión.
+08-09-2024 23:40:44 - INFO - Tarea creada para a: a
+08-09-2024 23:40:47 - INFO - Listado de tareas consultado para a.
+08-09-2024 23:41:08 - INFO - Filtros aplicados para a: 
+08-09-2024 23:43:12 - INFO - Se ha cerrado sesión.
+08-09-2024 23:43:28 - INFO - Usuario 'a' ha iniciado sesión.
+08-09-2024 23:43:44 - INFO - Tarea creada para a: b
+08-09-2024 23:43:47 - INFO - Listado de tareas consultado para a.

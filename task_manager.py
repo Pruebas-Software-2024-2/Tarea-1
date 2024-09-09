@@ -5,21 +5,29 @@ from datetime import datetime
 
 TASKS_FILE = 'tasks.json'
 
-# Función para cargar tareas desde el archivo
-def load_tasks():
+# Función para cargar tareas desde el archivo para un usuario específico
+def load_tasks(username):
     if not os.path.exists(TASKS_FILE):
         return []
     with open(TASKS_FILE, 'r') as f:
-        return json.load(f)
+        tasks = json.load(f)
+    return tasks.get(username, [])
 
-# Función para guardar tareas en el archivo
-def save_tasks(tasks):
+# Función para guardar tareas de un usuario específico en el archivo
+def save_tasks(username, tasks):
+    if os.path.exists(TASKS_FILE):
+        with open(TASKS_FILE, 'r') as f:
+            all_tasks = json.load(f)
+    else:
+        all_tasks = {}
+
+    all_tasks[username] = tasks
     with open(TASKS_FILE, 'w') as f:
-        json.dump(tasks, f, indent=4)
+        json.dump(all_tasks, f, indent=4)
 
 # Función para crear una nueva tarea
-def create_task(title, description, due_date, label):
-    tasks = load_tasks()
+def create_task(username, title, description, due_date, label):
+    tasks = load_tasks(username)
     try:
         due_date_obj = datetime.strptime(due_date, "%d-%m-%Y")
     except ValueError:
@@ -32,87 +40,86 @@ def create_task(title, description, due_date, label):
     if due_date_obj < current_date:
         status = "Atrasado"
     else:
-        status = "Pendiente"  # Estado inicial: pendiente
+        status = "Pendiente"
 
     task = {
         'title': title,
         'description': description,
         'due_date': due_date,
         'label': label,
-        'status': status # Estado inicial de la tarea
+        'status': status
     }
     tasks.append(task)
-    save_tasks(tasks)
+    save_tasks(username, tasks)
     print(f"Tarea '{title}' creada correctamente.")
-    logging.info(f"Tarea creada: {title}")
+    logging.info(f"Tarea creada para {username}: {title}")
 
-# Función para mostrar todas las tareas
-def list_tasks():
-    tasks = load_tasks()
+# Función para mostrar todas las tareas de un usuario
+def list_tasks(username):
+    tasks = load_tasks(username)
     if not tasks:
-        print("No hay tareas registradas.")
-        logging.info("Listado de tareas consultado (sin tareas).")
+        print(f"{username} no tiene tareas registradas.")
+        logging.info(f"Listado de tareas consultado para {username} (sin tareas).")
         return
-    else:
-        logging.info("Listado de tareas consultado.")
+    logging.info(f"Listado de tareas consultado para {username}.")
     
     for task in tasks:
         print(f"Título: {task['title']}, Estado: {task['status']}, Fecha de vencimiento: {task['due_date']}, Etiqueta: {task['label']}")
 
-# Función para actualizar el estado de una tarea
-def update_task_status(title, new_status):
-    tasks = load_tasks()
-    for task in tasks:
-        if task['title'] == title:
-            if new_status == "Completada":
-                print(f"Tarea '{task['title']}' completada")
-                delete = input("Desea eliminarla?\n(1) Si\n(2)No\n")
-                if delete == "1":
-                    delete_task(title)
-                return 
-            task['status'] = new_status
-            save_tasks(tasks)
-            logging.info(f"Estado de la tarea '{title}' actualizado a '{new_status}'.")
-            print(f"Estado de la tarea '{title}' actualizado a {new_status}.")
-            return
-    print(f"No se encontró la tarea con el título '{title}'.")
-
-# Función para eliminar una tarea
-def delete_task(title):
-    tasks = load_tasks()
-    tasks = [task for task in tasks if task['title'] != title]
-    save_tasks(tasks)
-    print(f"Tarea '{title}' eliminada correctamente.")
-    logging.info(f"Tarea eliminada: {title}")
-
-# Función para buscar tareas por etiqueta, fecha de vencimiento o estado
-def search_tasks(filter_dict):
-    tasks = load_tasks()
+# Función para buscar tareas por etiqueta, fecha de vencimiento o estado para un usuario específico
+def search_tasks(username, filter_dict):
+    tasks = load_tasks(username)
     filtered_tasks = tasks
 
-    # Filtrar por fecha
+    if 'titulo' in filter_dict:
+        filtered_tasks = [task for task in filtered_tasks if task['title'].lower() == filter_dict['titulo'].lower()]
+
     if 'fecha' in filter_dict:
         try:
             filter_date = datetime.strptime(filter_dict['fecha'], "%d-%m-%Y")
             filtered_tasks = [task for task in filtered_tasks if datetime.strptime(task['due_date'], "%d-%m-%Y") == filter_date]
         except ValueError:
             print("Formato de fecha incorrecto. Use DD-MM-YYYY.")
-            logging.error("Error en el formato de la fecha de búsqueda.")
+            logging.error(f"Error en el formato de la fecha de búsqueda para {username}.")
             return
 
-    # Filtrar por etiqueta
     if 'etiqueta' in filter_dict:
         filtered_tasks = [task for task in filtered_tasks if task['label'].lower() == filter_dict['etiqueta'].lower()]
 
-    # Filtrar por estado
     if 'estado' in filter_dict:
         filtered_tasks = [task for task in filtered_tasks if task['status'].lower() == filter_dict['estado'].lower()]
 
     if not filtered_tasks:
-        print("No se encontraron tareas con los filtros aplicados.")
-        logging.info("No se encontraron tareas con los filtros aplicados.")
+        print(f"No se encontraron tareas con los filtros aplicados para {username}.")
+        logging.info(f"No se encontraron tareas con los filtros aplicados para {username}.")
         return
 
-    logging.info("Filtros aplicados: " + ", ".join([f"{k} = {v}" for k, v in filter_dict.items()]))
+    logging.info(f"Filtros aplicados para {username}: " + ", ".join([f"{k} = {v}" for k, v in filter_dict.items()]))
     for task in filtered_tasks:
         print(f"Título: {task['title']}, Estado: {task['status']}, Fecha de vencimiento: {task['due_date']}, Etiqueta: {task['label']}")
+
+# Función para actualizar el estado de una tarea de un usuario específico
+def update_task_status(username, title, new_status):
+    tasks = load_tasks(username)
+    for task in tasks:
+        if task['title'] == title:
+            if new_status == "Completada":
+                print(f"Tarea '{task['title']}' completada")
+                delete = input("Desea eliminarla?\n(1) Si\n(2) No\n")
+                if delete == "1":
+                    delete_task(username, title)
+                return
+            task['status'] = new_status
+            save_tasks(username, tasks)
+            logging.info(f"Estado de la tarea '{title}' actualizado a '{new_status}' para {username}.")
+            print(f"Estado de la tarea '{title}' actualizado a {new_status} para {username}.")
+            return
+    print(f"No se encontró la tarea con el título '{title}' para {username}.")
+
+# Función para eliminar una tarea de un usuario
+def delete_task(username, title):
+    tasks = load_tasks(username)
+    tasks = [task for task in tasks if task['title'] != title]
+    save_tasks(username, tasks)
+    print(f"Tarea '{title}' eliminada correctamente.")
+    logging.info(f"Tarea '{title}' eliminada para {username}.")
