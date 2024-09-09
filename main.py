@@ -74,7 +74,7 @@ def task_management_menu(username):
             etiqueta = input("Ingrese la etiqueta o deje en blanco para omitir: ")
             if etiqueta:
                 filter_dict['etiqueta'] = etiqueta
-            estado = input("Ingrese el estado (Pendiente, En progreso, Completada) o deje en blanco para omitir: ")
+            estado = input("Ingrese el estado (Atrasada, Pendiente, En progreso, Completada) o deje en blanco para omitir: ")
             if estado:
                 filter_dict['estado'] = estado
 
