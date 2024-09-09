@@ -20,6 +20,20 @@
             "due_date": "22-12-2025",
             "label": "Urgente",
             "status": "Pendiente"
+        },
+        {
+            "title": "Hola Mundo!",
+            "description": "Tarea de prueba",
+            "due_date": "05-10-2024",
+            "label": "Trabajo",
+            "status": "Pendiente"
+        },
+        {
+            "title": "Hola Mundo",
+            "description": "Test",
+            "due_date": "03-08-2025",
+            "label": "Personal",
+            "status": "Pendiente"
         }
     ],
     "ola": [
